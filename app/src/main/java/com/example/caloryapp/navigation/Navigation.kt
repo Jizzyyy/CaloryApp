@@ -13,6 +13,7 @@ import com.example.caloryapp.pages.onboard.OTPVerificationScreen
 import com.example.caloryapp.pages.onboard.OnBoardingScreen
 import com.example.caloryapp.pages.onboard.SuccessChangePassword
 import com.example.caloryapp.pages.onboard.SuccessRegister
+import com.example.caloryapp.widget.MainScreen
 
 @Composable
 fun Navigation(modifier: Modifier = Modifier) {
@@ -30,6 +31,9 @@ fun Navigation(modifier: Modifier = Modifier) {
         }
         composable(NavigationScreen.NavBarScreen.name) {
             NavBarScreen()
+        }
+        composable(NavigationScreen.MainScreen.name) {
+            MainScreen()
         }
         composable(NavigationScreen.ForgotPasswordScreen.name) {
             ForgotPasswordScreen(navController = navController)

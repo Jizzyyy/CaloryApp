@@ -64,15 +64,9 @@ fun NavBarScreen(modifier: Modifier = Modifier) {
                 navController = navController,
                 startDestination = BottomNavigationScreen.HomeScreen.title
             ) {
-                composable(BottomNavigationScreen.HomeScreen.title) {
-                    HomeScreen(navController = navController)
-                }
-                composable(BottomNavigationScreen.ProfileScreen.title) {
-                    ProfileScreen(navController = navController)
-                }
             }
         }
-    )
+                                                                                                                                                             )
 }
 
 @Composable

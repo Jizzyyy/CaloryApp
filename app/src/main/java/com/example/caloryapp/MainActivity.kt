@@ -4,8 +4,15 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import com.example.caloryapp.pages.NavBarScreen
+import androidx.navigation.compose.rememberNavController
+import com.example.caloryapp.navigation.Navigation
+import com.example.caloryapp.pages.account.ProfileScreen
+import com.example.caloryapp.pages.dashboard.HomeScreen
+//import com.example.caloryapp.pages.NavBarScreen
+import com.example.caloryapp.pages.onboard.LoginScreen
+import com.example.caloryapp.pages.onboard.OnBoardingScreen
 import com.example.caloryapp.ui.theme.CaloryAppTheme
+import com.example.caloryapp.widget.MainScreen
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -13,31 +20,10 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CaloryAppTheme {
-                NavBarScreen()
-//                ChangePasswordScreen(navController = rememberNavController())
-//                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-//                    Greeting(
-//                        name = "Android",
-//                        modifier = Modifier.padding(innerPadding)
-//                    )
-//                }
+//                Navigation()
+//                ProfileScreen(navController = rememberNavController())
+                MainScreen()
             }
         }
     }
 }
-
-//@Composable
-//fun Greeting(name: String, modifier: Modifier = Modifier) {
-//    Text(
-//        text = "Hello $name!",
-//        modifier = modifier
-//    )
-//}
-//
-//@Preview(showBackground = true)
-//@Composable
-//fun GreetingPreview() {
-//    CaloryAppTheme {
-//        Greeting("Android")
-//    }
-//}

@@ -5,6 +5,7 @@ enum class NavigationScreen {
     LoginScreen,
     NavBarScreen,
     HomeScreen,
+    MainScreen,
     ForgotPasswordScreen,
     ChangePasswordScreen,
     OTPVerificationScreen,
@@ -17,6 +18,7 @@ enum class NavigationScreen {
             OnBoardingScreen.name -> OnBoardingScreen
             LoginScreen.name -> LoginScreen
             NavBarScreen.name -> NavBarScreen
+            MainScreen.name -> MainScreen
             HomeScreen.name -> HomeScreen
             ProfileScreen.name -> ProfileScreen
             ForgotPasswordScreen.name -> ForgotPasswordScreen

@@ -14,12 +14,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.Text
+import androidx.compose.material.Divider
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -27,63 +30,98 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.os.unregisterForAllProfilingResults
 import androidx.navigation.NavController
 import com.example.caloryapp.R
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
+import com.example.caloryapp.ui.theme.medium
+import com.example.caloryapp.ui.theme.primary
 import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.primarygrey
 import com.example.caloryapp.ui.theme.primaryred
+import com.example.caloryapp.ui.theme.regular
 import com.example.caloryapp.widget.SimpleAlertDialog
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 @Composable
-fun ProfileScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun ProfileScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    drawerState: DrawerState,
+    scope: kotlinx.coroutines.CoroutineScope
+) {
     val openAlertDialog = remember { mutableStateOf(false) }
+    val currentDate = Calendar.getInstance().time
+    val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
+    val formattedDate = dateFormat.format(currentDate)
 
     Box(
         modifier
             .fillMaxSize()
             .background(background)
     ) {
-        Column(modifier.padding(horizontal = 25.dp, vertical = 40.dp)) {
+        Column(modifier.padding(horizontal = 25.dp, vertical = 45.dp)) {
             Spacer(modifier.height(50.dp))
-            androidx.compose.material.Text(
-                text = stringResource(R.string.akun),
-                style = TextStyle(
-                    fontSize = 35.sp,
-                    color = primaryblack,
-                    fontFamily = bold
-                )
-            )
-            Spacer(modifier.height(50.dp))
-            Row(Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+            Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Image(
-                    painter = painterResource(id = R.drawable.ic_profile_men),
-                    contentDescription = null,
-                    modifier = Modifier.size(80.dp)
+                    modifier = Modifier.clickable { scope.launch { drawerState.open() } },
+                    painter = painterResource(id = R.drawable.ic_home_acc),
+                    contentDescription = null
                 )
-                Spacer(modifier.width(20.dp))
-                Column {
-                    androidx.compose.material.Text(
-                        text = "Naufal Kadhafi",
-                        style = TextStyle(
-                            fontSize = 23.sp,
-                            color = primaryblack,
-                            fontFamily = bold
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Column(horizontalAlignment = Alignment.End) {
+                        Text(
+                            text = "Naufal Kadhafi",
+                            style = TextStyle(
+                                fontSize = 20.sp,
+                                color = Color.Black,
+                                fontFamily = bold
+                            )
                         )
-                    )
-                    Spacer(modifier = Modifier.height(5.dp))
-                    androidx.compose.material.Text(
-                        text = "kadhafinaufal2@gmail.com",
-                        style = TextStyle(
-                            fontSize = 15.sp,
-                            color = primarygrey,
-                            fontFamily = bold
+                        Text(
+                            text = "@kadhafiinl",
+                            style = TextStyle(
+                                fontSize = 14.sp,
+                                color = Color.Black,
+                                fontFamily = bold
+                            )
                         )
+                    }
+                    Spacer(modifier = Modifier.width(14.dp))
+                    Image(
+                        painter = painterResource(id = R.drawable.ic_profile_women),
+                        contentDescription = null,
+                        Modifier.size(45.dp)
                     )
                 }
             }
-            Spacer(modifier.height(60.dp))
+
+            Spacer(modifier.height(40.dp))
+            Text(
+                text = "Hari Ini,",
+                style = TextStyle(
+                    fontSize = 38.sp,
+                    color = Color.Black,
+                    fontFamily = bold
+                )
+            )
+            Text(
+                text = formattedDate,
+                style = TextStyle(
+                    fontSize = 24.sp,
+                    color = Color.Black,
+                    fontFamily = medium
+                )
+            )
+            Spacer(modifier.height(10.dp))
+            Divider(color = primary.copy(alpha = 0.2f), thickness = 3.dp)
+            Spacer(modifier.height(20.dp))
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                 Row {
                     Image(

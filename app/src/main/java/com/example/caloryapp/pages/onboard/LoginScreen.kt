@@ -118,7 +118,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             }
             Spacer(modifier.height(35.dp))
             Button(
-                onClick = { navController.navigate(NavigationScreen.NavBarScreen.name) },
+                onClick = { navController.navigate(NavigationScreen.MainScreen.name) },
                 modifier
                     .width(360.dp)
                     .height(50.dp),
