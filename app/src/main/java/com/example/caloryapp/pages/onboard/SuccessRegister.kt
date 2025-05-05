@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.caloryapp.R
+import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.primary
@@ -48,7 +49,7 @@ fun SuccessRegister(modifier: Modifier = Modifier, navController: NavController)
             Image(imageVector = ImageVector.vectorResource(id = R.drawable.ic_success), contentDescription = "")
             Spacer(modifier = Modifier.height(115.dp))
             Button(
-                onClick = {  },
+                onClick = { navController.navigate(NavigationScreen.LoginScreen.name) },
                 modifier
                     .width(360.dp)
                     .height(50.dp),

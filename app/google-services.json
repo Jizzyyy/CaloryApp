@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1003809764619",
+    "project_id": "caloryapp-a3033",
+    "storage_bucket": "caloryapp-a3033.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1003809764619:android:c254ab536c723e7700de0e",
+        "android_client_info": {
+          "package_name": "com.example.caloryapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxisqLMzEc1vFjjPd8jpXuNse7BMEt7HE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

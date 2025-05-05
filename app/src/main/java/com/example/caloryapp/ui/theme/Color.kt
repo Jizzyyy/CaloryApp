@@ -8,6 +8,7 @@ var primarygrey = Color(0xffBABABA)
 var background = Color(0xffF4F4F4)
 var blueunderlined = Color(0xff0063BF)
 var primaryred = Color(0xffE85454)
+val fontGrey = Color(0xFF828282)
 
 val Purple80 = Color(0xFFD0BCFF)
 val PurpleGrey80 = Color(0xFFCCC2DC)

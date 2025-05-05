@@ -38,14 +38,24 @@ import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.primarygrey
 import com.example.caloryapp.widget.FilterBar
 import kotlinx.coroutines.launch
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.ViewModel
+import com.example.caloryapp.model.UserModel
+import com.example.caloryapp.pages.camera.FoodClassifier
+import com.example.caloryapp.viewmodel.UserViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+
 
 @Composable
 fun HomeScreen(
     navController: NavController,
     drawerState: DrawerState,
-    scope: kotlinx.coroutines.CoroutineScope
+    scope: kotlinx.coroutines.CoroutineScope,
+    viewModel: UserViewModel,
 ) {
     var selectedFilter by remember { mutableStateOf("Semua") }
+    val user = viewModel.user.value
 
     Box(
         modifier = Modifier
@@ -61,7 +71,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    modifier = Modifier.clickable { scope.launch { drawerState.open() } },
+                    modifier = Modifier.clickable {   },
                     painter = painterResource(id = R.drawable.ic_home_acc),
                     contentDescription = null
                 )
@@ -69,7 +79,7 @@ fun HomeScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
-                            text = "Naufal Kadhafi",
+                            text = user!!.fullName,
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 color = Color.Black,
@@ -77,7 +87,7 @@ fun HomeScreen(
                             )
                         )
                         Text(
-                            text = "@kadhafiinl",
+                            text = "@${user.username}",
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 color = Color.Black,
@@ -99,7 +109,7 @@ fun HomeScreen(
             // Teks sapaan
             Row(Modifier.width(215.dp)) {
                 Text(
-                    text = "Hai Naufal, Bagaimana kabar kamu hari ini?",
+                    text = "Hai ${user!!.fullName}, Bagaimana kabar kamu hari ini?",
                     style = TextStyle(
                         fontSize = 22.sp,
                         color = Color.Black,

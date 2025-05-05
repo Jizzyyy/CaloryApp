@@ -3,6 +3,7 @@ package com.example.caloryapp.navigation
 enum class NavigationScreen {
     OnBoardingScreen,
     LoginScreen,
+    RegisterScreen,
     NavBarScreen,
     HomeScreen,
     MainScreen,
@@ -11,12 +12,15 @@ enum class NavigationScreen {
     OTPVerificationScreen,
     SuccessChangePassword,
     SuccessRegister,
-    ProfileScreen;
+    ProfileScreen,
+    ProfileDetailScreen,
+    ProfileChangePasswordScreen;
 
     fun fromRoute(route: String): NavigationScreen =
         when (route.substringBefore("/")) {
             OnBoardingScreen.name -> OnBoardingScreen
             LoginScreen.name -> LoginScreen
+            RegisterScreen.name -> RegisterScreen
             NavBarScreen.name -> NavBarScreen
             MainScreen.name -> MainScreen
             HomeScreen.name -> HomeScreen
@@ -26,6 +30,8 @@ enum class NavigationScreen {
             OTPVerificationScreen.name -> OTPVerificationScreen
             SuccessChangePassword.name -> SuccessChangePassword
             SuccessRegister.name -> SuccessRegister
+            ProfileDetailScreen.name -> ProfileDetailScreen
+            ProfileChangePasswordScreen.name -> ProfileChangePasswordScreen
 
             else -> throw IllegalArgumentException("$route gagal bji")
         }

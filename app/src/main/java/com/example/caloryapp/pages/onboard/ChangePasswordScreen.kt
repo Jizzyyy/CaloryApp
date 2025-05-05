@@ -66,7 +66,7 @@ fun ChangePasswordScreen(modifier: Modifier = Modifier, navController: NavContro
             Spacer(modifier.height(16.dp))
             CustomTextField(
                 value = newPassword,
-                onValueChange = { newPassword = it },
+                onValueChange = { newPassword = it },input = true,
                 placeholderText = "Masukkan Kata Sandi"
             )
             Spacer(modifier.height(20.dp))
@@ -81,7 +81,7 @@ fun ChangePasswordScreen(modifier: Modifier = Modifier, navController: NavContro
             Spacer(modifier.height(16.dp))
             CustomTextField(
                 value = confirmPassword,
-                onValueChange = { confirmPassword = it },
+                onValueChange = { confirmPassword = it },input = true,
                 placeholderText = "Konfirmasi Kata Sandi"
             )
             Spacer(modifier.height(45.dp))

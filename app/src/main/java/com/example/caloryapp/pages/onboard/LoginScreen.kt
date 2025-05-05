@@ -1,21 +1,26 @@
 package com.example.caloryapp.pages.onboard
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -23,6 +28,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -36,15 +42,35 @@ import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.blueunderlined
 import com.example.caloryapp.ui.theme.bold
+import com.example.caloryapp.ui.theme.fontGrey
 import com.example.caloryapp.ui.theme.primary
 import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.semibold
+import com.example.caloryapp.viewmodel.LoginState
+import com.example.caloryapp.viewmodel.UserViewModel
 import com.example.caloryapp.widget.CustomTextField
 
 @Composable
-fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
+fun LoginScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController,
+    viewModel: UserViewModel
+) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val state = viewModel.loginstate.value
+    val userData = viewModel.user.value
+    val context = LocalContext.current
+
+    LaunchedEffect(key1 = state) {
+        if (state is LoginState.Success) {
+            Toast.makeText(context, "Selamat Datang, ${state.user.fullName}", Toast.LENGTH_SHORT).show()
+            navController.navigate(NavigationScreen.MainScreen.name)
+        } else if (state is LoginState.Error) {
+            Toast.makeText(context, "Username atau Kata Sandi Tidak Sesuai!", Toast.LENGTH_SHORT)
+                .show()
+        }
+    }
 
     Box(
         modifier
@@ -83,7 +109,7 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             Spacer(modifier.height(16.dp))
             CustomTextField(
                 value = username,
-                onValueChange = { username = it },
+                onValueChange = { username = it }, input = true,
                 placeholderText = "Username"
             )
             Spacer(modifier.height(16.dp))
@@ -98,27 +124,22 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
             Spacer(modifier.height(16.dp))
             CustomTextField(
                 value = password,
-                onValueChange = { password = it },
+                onValueChange = { password = it }, input = true,
                 placeholderText = "Password"
             )
             Spacer(modifier.height(18.dp))
-            Row(
-                modifier
-                    .align(Alignment.End)
-                    .clickable { navController.navigate(NavigationScreen.ForgotPasswordScreen.name) }) {
-                Text(
-                    text = stringResource(R.string.lupa_password),
-                    style = TextStyle(
-                        fontSize = 15.sp,
-                        color = blueunderlined,
-                        fontFamily = semibold,
-                        textDecoration = TextDecoration.Underline
-                    )
-                )
-            }
-            Spacer(modifier.height(35.dp))
             Button(
-                onClick = { navController.navigate(NavigationScreen.MainScreen.name) },
+                onClick = {
+                    if (username.isEmpty()) {
+                        Toast.makeText(context, "Username Tidak Boleh Kosong", Toast.LENGTH_SHORT)
+                            .show()
+                    } else if (password.isEmpty()){
+                        Toast.makeText(context, "Password Tidak Boleh Kosong", Toast.LENGTH_SHORT)
+                            .show()
+                    } else {
+                        viewModel.login(username, password)
+                    }
+                },
                 modifier
                     .width(360.dp)
                     .height(50.dp),
@@ -130,17 +151,44 @@ fun LoginScreen(modifier: Modifier = Modifier, navController: NavController) {
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
-                        fontFamily = bold,
+                        fontFamily = MaterialTheme.typography.h1.fontFamily,
                         textAlign = TextAlign.Center
                     )
                 )
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+            Row(
+                Modifier.fillMaxWidth(), Arrangement.Center
+            ) {
+                Text(
+                    text = "Belum Punya Akun ?",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        color = fontGrey,
+                        fontFamily = semibold
+                    )
+                )
+                Spacer(modifier = Modifier.width(2.dp))
+                Text(
+                    modifier = Modifier.clickable { navController.navigate(NavigationScreen.RegisterScreen.name) },
+                    text = "Daftar",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        color = blueunderlined,
+                        fontFamily = semibold,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+
+//            if (state is LoginState.Error) {
+//                Text(text = "", color = MaterialTheme.colors.error)
+//                Toast.makeText(context, "Username atau Kata Sandi Tidak Sesuai!", Toast.LENGTH_SHORT)
+//                    .show()
+//            }
+
+            Spacer(modifier.height(42.dp))
         }
     }
 }
-
-//@Preview(showBackground = true)
-//@Composable
-//fun Preview(modifier: Modifier = Modifier) {
-//    LoginScreen(navController = rememberNavController())
-//}

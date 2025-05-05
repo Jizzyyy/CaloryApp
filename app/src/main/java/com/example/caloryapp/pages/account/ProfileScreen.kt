@@ -33,6 +33,8 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.unregisterForAllProfilingResults
 import androidx.navigation.NavController
 import com.example.caloryapp.R
+import com.example.caloryapp.navigation.NavigationScreen
+import com.example.caloryapp.pages.DrawerScreen
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.medium
@@ -41,6 +43,7 @@ import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.primarygrey
 import com.example.caloryapp.ui.theme.primaryred
 import com.example.caloryapp.ui.theme.regular
+import com.example.caloryapp.viewmodel.UserViewModel
 import com.example.caloryapp.widget.SimpleAlertDialog
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -52,8 +55,10 @@ fun ProfileScreen(
     modifier: Modifier = Modifier,
     navController: NavController,
     drawerState: DrawerState,
-    scope: kotlinx.coroutines.CoroutineScope
-) {
+    scope: kotlinx.coroutines.CoroutineScope,
+    viewModel: UserViewModel,
+    ) {
+    val user = viewModel.user.value
     val openAlertDialog = remember { mutableStateOf(false) }
     val currentDate = Calendar.getInstance().time
     val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
@@ -77,7 +82,7 @@ fun ProfileScreen(
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Column(horizontalAlignment = Alignment.End) {
                         Text(
-                            text = "Naufal Kadhafi",
+                            text = user!!.fullName,
                             style = TextStyle(
                                 fontSize = 20.sp,
                                 color = Color.Black,
@@ -85,7 +90,7 @@ fun ProfileScreen(
                             )
                         )
                         Text(
-                            text = "@kadhafiinl",
+                            text = "@${user.username}",
                             style = TextStyle(
                                 fontSize = 14.sp,
                                 color = Color.Black,
@@ -121,7 +126,7 @@ fun ProfileScreen(
             )
             Spacer(modifier.height(10.dp))
             Divider(color = primary.copy(alpha = 0.2f), thickness = 3.dp)
-            Spacer(modifier.height(20.dp))
+            Spacer(modifier.height(40.dp))
             Row(Modifier.fillMaxWidth(), Arrangement.SpaceBetween) {
                 Row {
                     Image(
@@ -139,6 +144,7 @@ fun ProfileScreen(
                     )
                 }
                 Image(
+                    modifier = Modifier.clickable { navController.navigate(NavigationScreen.ProfileDetailScreen.name) },
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_btn_detail),
                     contentDescription = null
                 )
@@ -185,6 +191,7 @@ fun ProfileScreen(
                     )
                 }
                 Image(
+                    modifier = Modifier.clickable { navController.navigate(NavigationScreen.ProfileChangePasswordScreen.name) },
                     imageVector = ImageVector.vectorResource(id = R.drawable.ic_btn_detail),
                     contentDescription = null
                 )

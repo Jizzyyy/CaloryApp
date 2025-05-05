@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.google.gms.google.services)
 }
 
 android {
@@ -63,6 +64,12 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.auth)
+    implementation(libs.androidx.credentials)
+    implementation(libs.androidx.credentials.play.services.auth)
+    implementation(libs.googleid)
+//    implementation(libs.firebase.auth.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -70,4 +77,30 @@ dependencies {
     androidTestImplementation(libs.androidx.ui.test.junit4)
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+    // TensorFlow Lite Core
+    implementation (libs.tensorflow.lite)
+
+    // Opsional: TensorFlow Lite dengan Ops TensorFlow Select
+    implementation (libs.tensorflow.lite.select.tf.ops)
+
+    // Opsional: TensorFlow Lite untuk model yang dikonversi dengan support GPU
+    implementation (libs.tensorflow.lite.gpu)
+
+    // Opsional: TensorFlow Lite Support Library untuk Image Processing
+    implementation (libs.tensorflow.lite.support)
+
+    // Kotlin Coroutines (Jika menggunakan async task)
+    implementation (libs.kotlinx.coroutines.core)
+    implementation (libs.kotlinx.coroutines.android)
+
+    // CameraX Dependencies (Jika menggunakan kamera real-time)
+    implementation(libs.androidx.camera.core)
+    implementation( libs.androidx.camera.camera2)
+    implementation (libs.androidx.camera.lifecycle)
+    implementation (libs.androidx.camera.view)
+    implementation (libs.androidx.camera.extensions)
+
+    // Glide (Untuk memuat gambar dengan cepat)
+    implementation (libs.glide)
 }

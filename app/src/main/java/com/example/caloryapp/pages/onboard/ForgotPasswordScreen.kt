@@ -79,7 +79,7 @@ fun ForgotPasswordScreen(modifier: Modifier = Modifier, navController: NavContro
             Spacer(modifier.height(16.dp))
             CustomTextField(
                 value = gmail,
-                onValueChange = { gmail = it },
+                onValueChange = { gmail = it },input = true,
                 placeholderText = stringResource(R.string.gmail)
             )
             Spacer(modifier.height(40.dp))
