@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -33,6 +34,7 @@ import androidx.compose.ui.unit.sp
 import androidx.core.os.unregisterForAllProfilingResults
 import androidx.navigation.NavController
 import com.example.caloryapp.R
+import com.example.caloryapp.navigation.Navigation
 import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.pages.DrawerScreen
 import com.example.caloryapp.ui.theme.background
@@ -45,10 +47,15 @@ import com.example.caloryapp.ui.theme.primaryred
 import com.example.caloryapp.ui.theme.regular
 import com.example.caloryapp.viewmodel.UserViewModel
 import com.example.caloryapp.widget.SimpleAlertDialog
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
+
+fun logoutUser() {
+    FirebaseAuth.getInstance().signOut()
+}
 
 @Composable
 fun ProfileScreen(
@@ -221,8 +228,9 @@ fun ProfileScreen(
                     dialogSubTitle = "Apakah Anda yakin ingin keluar?",
                     onDismissRequest = { openAlertDialog.value = false },
                     onConfirmation = {
+                        logoutUser()
                         openAlertDialog.value = false
-                        // Tambahkan aksi logout di sini
+//                        Navigation()
                     }
                 )
             }

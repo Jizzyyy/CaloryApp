@@ -1,24 +1,27 @@
 package com.example.caloryapp.widget
 
+//noinspection UsingMaterialAndMaterial3Libraries
+//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
-import androidx.compose.material3.Text
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.OutlinedTextField
-//noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.TextFieldDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.caloryapp.R
@@ -26,12 +29,6 @@ import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.primarygrey
 import com.example.caloryapp.ui.theme.semibold
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.text.input.PasswordVisualTransformation
-import androidx.compose.ui.text.input.VisualTransformation
 
 @Composable
 fun CustomPasswordTextField(
@@ -66,16 +63,23 @@ fun CustomPasswordTextField(
         },
         modifier = Modifier
             .fillMaxWidth()
-            .height(50.dp)
-            .padding(end = 16.dp), // Add padding for the icon
+            .height(50.dp), // Add padding for the icon
         visualTransformation = if (isPasswordVisible) VisualTransformation.None else PasswordVisualTransformation(),
         trailingIcon = {
             IconButton(onClick = { isPasswordVisible = !isPasswordVisible }) {
                 Icon(
-                    imageVector = if (isPasswordVisible) Icons.Filled.Check else Icons.Filled.Check,
-                    contentDescription = "Toggle Password Visibility",
-                    tint = Color.Gray // Sesuaikan dengan warna ikon pada desain
+                    modifier = Modifier.size(25.dp),
+                    painter = if (isPasswordVisible) painterResource(id = R.drawable.ic_show) else painterResource(
+                        id = R.drawable.ic_hide
+                    ),
+                    contentDescription = null,
+                    tint = Color.Gray
                 )
+//                Icon(
+//                    imageVector = if (isPasswordVisible) Icons.Filled.Check else Icons.Filled.Check,
+//                    contentDescription = "Toggle Password Visibility",
+//                    tint = Color.Gray // Sesuaikan dengan warna ikon pada desain
+//                )
             }
         },
         colors = TextFieldDefaults.outlinedTextFieldColors(

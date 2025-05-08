@@ -35,11 +35,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.caloryapp.R
+import com.example.caloryapp.foodmodel.FoodDetectionViewModel
 import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.pages.account.ProfileChangePasswordScreen
 import com.example.caloryapp.pages.account.ProfileDetailScreen
 import com.example.caloryapp.pages.account.ProfileScreen
+import com.example.caloryapp.pages.camera.ScreenTest
 import com.example.caloryapp.pages.dashboard.HomeScreen
+import com.example.caloryapp.pages.onboard.LoginScreen
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.medium
 import com.example.caloryapp.ui.theme.primary
@@ -55,7 +58,8 @@ sealed class DrawerScreen(val title: String) {
 @SuppressLint("UnusedMaterialScaffoldPaddingParameter", "UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun MainScreen(
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    foodDetectionViewModel: FoodDetectionViewModel
 ) {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -79,6 +83,12 @@ fun MainScreen(
             }
             composable(NavigationScreen.ProfileChangePasswordScreen.name) {
                 ProfileChangePasswordScreen(navController = navController, viewModel = userViewModel)
+            }
+            composable(NavigationScreen.ScreenTest.name) {
+                ScreenTest(navController = navController, viewModel = foodDetectionViewModel)
+            }
+            composable(NavigationScreen.LoginScreen.name) {
+                LoginScreen(navController = navController, viewModel = userViewModel)
             }
         }
     }

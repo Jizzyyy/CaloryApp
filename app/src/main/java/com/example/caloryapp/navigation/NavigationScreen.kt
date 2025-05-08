@@ -14,7 +14,8 @@ enum class NavigationScreen {
     SuccessRegister,
     ProfileScreen,
     ProfileDetailScreen,
-    ProfileChangePasswordScreen;
+    ProfileChangePasswordScreen,
+    ScreenTest;
 
     fun fromRoute(route: String): NavigationScreen =
         when (route.substringBefore("/")) {
@@ -32,6 +33,7 @@ enum class NavigationScreen {
             SuccessRegister.name -> SuccessRegister
             ProfileDetailScreen.name -> ProfileDetailScreen
             ProfileChangePasswordScreen.name -> ProfileChangePasswordScreen
+            ScreenTest.name -> ScreenTest
 
             else -> throw IllegalArgumentException("$route gagal bji")
         }

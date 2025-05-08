@@ -20,6 +20,7 @@ class UserRepository {
             }
     }
 
+
     fun registerUserWithCustomID(user: UserModel, userID: String, onComplete: (Boolean) -> Unit) {
         db.collection("users")
             .document(userID)
@@ -47,6 +48,10 @@ class UserRepository {
             .addOnFailureListener {
                 onComplete(null)
             }
+    }
+
+    fun logoutUser() {
+        FirebaseAuth.getInstance().signOut()
     }
 
     fun updatePasswordByUsername(username: String, oldPassword: String, newPassword: String, onComplete: (Boolean) -> Unit) {
@@ -77,6 +82,68 @@ class UserRepository {
             }
             .addOnFailureListener {
                 onComplete(false)  // Terjadi error dalam pencarian data
+            }
+    }
+
+    fun updateUserData(username: String, fullName: String, email: String, gender: String, weight: String, height: String, onComplete: (Boolean) -> Unit) {
+        db.collection("users")
+            .whereEqualTo("username", username)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val userDocument = result.documents[0]
+                    // Memperbarui data pengguna
+                    userDocument.reference.update(
+                        "fullName", fullName,
+                        "email", email,
+                        "gender", gender,
+                        "weight", weight,
+                        "height", height
+                    )
+                        .addOnSuccessListener {
+                            onComplete(true) // Update berhasil
+                        }
+                        .addOnFailureListener {
+                            onComplete(false) // Update gagal
+                        }
+                } else {
+                    onComplete(false) // Username tidak ditemukan
+                }
+            }
+            .addOnFailureListener {
+                onComplete(false) // Terjadi error dalam pencarian data
+            }
+    }
+
+
+    fun updatePasswordByUsername2(username: String, newPassword: String, confirmPassword: String, onComplete: (Boolean) -> Unit) {
+        // Memeriksa apakah kata sandi baru dan konfirmasi cocok
+        if (newPassword != confirmPassword) {
+            onComplete(false) // Kata sandi tidak cocok
+            return
+        }
+
+        // Mencari pengguna berdasarkan username
+        db.collection("users")
+            .whereEqualTo("username", username)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val userDocument = result.documents[0]
+                    // Memperbarui kata sandi pengguna
+                    userDocument.reference.update("password", newPassword)
+                        .addOnSuccessListener {
+                            onComplete(true) // Update berhasil
+                        }
+                        .addOnFailureListener {
+                            onComplete(false) // Update gagal
+                        }
+                } else {
+                    onComplete(false) // Username tidak ditemukan
+                }
+            }
+            .addOnFailureListener {
+                onComplete(false) // Terjadi error dalam pencarian data
             }
     }
 

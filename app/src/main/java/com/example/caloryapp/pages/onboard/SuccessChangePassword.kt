@@ -29,6 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.caloryapp.R
+import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.primary
@@ -42,7 +43,7 @@ fun SuccessChangePassword(modifier: Modifier = Modifier, navController: NavContr
         Column(Modifier.padding(horizontal = 25.dp, vertical = 50.dp)) {
             Spacer(modifier = Modifier.height(50.dp))
             Text(
-                stringResource(R.string.password_kamu_berhasil_dibuat),
+                "Kata Sandi Kamu Berhasil Diubah",
                 style = TextStyle(
                     fontSize = 35.sp,
                     color = primaryblack,
@@ -58,7 +59,7 @@ fun SuccessChangePassword(modifier: Modifier = Modifier, navController: NavContr
             }
             Spacer(modifier = Modifier.height(115.dp))
             Button(
-                onClick = {  },
+                onClick = { navController.navigate(NavigationScreen.LoginScreen.name) },
                 modifier
                     .width(360.dp)
                     .height(50.dp),

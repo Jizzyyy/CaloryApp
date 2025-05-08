@@ -15,7 +15,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
@@ -48,6 +50,7 @@ import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.semibold
 import com.example.caloryapp.viewmodel.LoginState
 import com.example.caloryapp.viewmodel.UserViewModel
+import com.example.caloryapp.widget.CustomPasswordTextField
 import com.example.caloryapp.widget.CustomTextField
 
 @Composable
@@ -78,7 +81,9 @@ fun LoginScreen(
             .background(background)
     ) {
         Column(
-            modifier.padding(horizontal = 25.dp, vertical = 50.dp)
+            modifier
+                .padding(horizontal = 25.dp, vertical = 50.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier.height(50.dp))
             Text(
@@ -110,7 +115,7 @@ fun LoginScreen(
             CustomTextField(
                 value = username,
                 onValueChange = { username = it }, input = true,
-                placeholderText = "Username"
+                placeholderText = "Masukkan Username"
             )
             Spacer(modifier.height(16.dp))
             Text(
@@ -122,12 +127,30 @@ fun LoginScreen(
                 )
             )
             Spacer(modifier.height(16.dp))
-            CustomTextField(
+            CustomPasswordTextField(
                 value = password,
-                onValueChange = { password = it }, input = true,
-                placeholderText = "Password"
+                onValueChange = { password = it },
+                placeholderText = "Masukkan Kata Sandi",
+                input = true
             )
             Spacer(modifier.height(18.dp))
+            Row(
+                Modifier.fillMaxWidth(),
+                Arrangement.End
+            ) {
+                Text(
+                    modifier = Modifier.clickable { navController.navigate(NavigationScreen.ChangePasswordScreen.name) },
+                    text = "Lupa Password",
+                    style = TextStyle(
+                        fontSize = 16.sp,
+                        color = blueunderlined,
+                        fontFamily = semibold,
+                        textDecoration = TextDecoration.Underline
+                    )
+                )
+            }
+            Spacer(modifier.height(35.dp))
+
             Button(
                 onClick = {
                     if (username.isEmpty()) {
@@ -151,7 +174,7 @@ fun LoginScreen(
                     style = TextStyle(
                         fontSize = 18.sp,
                         color = Color.White,
-                        fontFamily = MaterialTheme.typography.h1.fontFamily,
+                        fontFamily = bold,
                         textAlign = TextAlign.Center
                     )
                 )

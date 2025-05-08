@@ -1,3 +1,5 @@
+@file:Suppress("CAST_NEVER_SUCCEEDS")
+
 package com.example.caloryapp.widget
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,12 +11,16 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.DialogProperties
+import androidx.navigation.NavController
 import com.example.caloryapp.R
+import com.example.caloryapp.navigation.Navigation
+import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.medium
 import com.example.caloryapp.ui.theme.primaryblack
@@ -41,7 +47,9 @@ fun SimpleAlertDialog(
             onDismissRequest()
         },
         confirmButton = {
-            TextButton(onClick = { onConfirmation() }) {
+            TextButton(onClick = {
+                onConfirmation()
+            }) {
                 androidx.compose.material.Text(
                     text = stringResource(R.string.ya),
                     style = TextStyle(

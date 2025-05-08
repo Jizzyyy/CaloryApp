@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.FloatingActionButton
+import androidx.compose.material.Icon
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,26 +27,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.caloryapp.R
+import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.primary
-import com.example.caloryapp.ui.theme.primaryblack
-import com.example.caloryapp.ui.theme.primarygrey
-import com.example.caloryapp.widget.FilterBar
-import kotlinx.coroutines.launch
-import android.widget.Toast
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.ViewModel
-import com.example.caloryapp.model.UserModel
-import com.example.caloryapp.pages.camera.FoodClassifier
 import com.example.caloryapp.viewmodel.UserViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.caloryapp.widget.FilterBar
 
 
 @Composable
@@ -71,7 +64,7 @@ fun HomeScreen(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Image(
-                    modifier = Modifier.clickable {   },
+                    modifier = Modifier.clickable { },
                     painter = painterResource(id = R.drawable.ic_home_acc),
                     contentDescription = null
                 )
@@ -131,6 +124,15 @@ fun HomeScreen(
 
             // Filter Bar
             FilterBar(selectedFilter = selectedFilter, onFilterSelected = { selectedFilter = it })
+        }
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 50.dp, bottom = 70.dp),
+            contentColor = Color.White,
+            backgroundColor = primary,
+            onClick = { navController.navigate(NavigationScreen.ScreenTest.name) }) {
+            Icon(painter = painterResource(id = R.drawable.scan), contentDescription = null)
         }
     }
 }
