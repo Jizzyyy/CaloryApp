@@ -1,10 +1,8 @@
-package com.example.caloryapp.pages.camera
+package com.example.caloryapp.pages.calorydetail
 
-import android.content.Context
 import android.widget.Toast
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 
 @Composable

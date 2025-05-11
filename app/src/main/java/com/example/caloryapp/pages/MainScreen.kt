@@ -35,18 +35,19 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.caloryapp.R
-import com.example.caloryapp.foodmodel.FoodDetectionViewModel
+import com.example.caloryapp.viewmodel.FoodDetectionViewModel
 import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.pages.account.ProfileChangePasswordScreen
 import com.example.caloryapp.pages.account.ProfileDetailScreen
 import com.example.caloryapp.pages.account.ProfileScreen
-import com.example.caloryapp.pages.camera.ScreenTest
+import com.example.caloryapp.pages.calorydetail.ScreenTest
 import com.example.caloryapp.pages.dashboard.HomeScreen
 import com.example.caloryapp.pages.onboard.LoginScreen
 import com.example.caloryapp.ui.theme.bold
 import com.example.caloryapp.ui.theme.medium
 import com.example.caloryapp.ui.theme.primary
 import com.example.caloryapp.ui.theme.semibold
+import com.example.caloryapp.viewmodel.CaloryHistoryViewModel
 import com.example.caloryapp.viewmodel.UserViewModel
 import kotlinx.coroutines.launch
 
@@ -59,7 +60,8 @@ sealed class DrawerScreen(val title: String) {
 @Composable
 fun MainScreen(
     userViewModel: UserViewModel,
-    foodDetectionViewModel: FoodDetectionViewModel
+    foodDetectionViewModel: FoodDetectionViewModel,
+    caloryHistoryViewModel: CaloryHistoryViewModel
 ) {
     val navController = rememberNavController()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
@@ -73,7 +75,7 @@ fun MainScreen(
     ) {
         NavHost(navController = navController, startDestination = DrawerScreen.HomeScreen.title) {
             composable(DrawerScreen.HomeScreen.title) {
-                HomeScreen(navController = navController, drawerState = drawerState, scope = scope, userViewModel)
+                HomeScreen(navController = navController, drawerState = drawerState, scope = scope, caloryHistoryViewModel, userViewModel)
             }
             composable(DrawerScreen.ProfileScreen.title) {
                 ProfileScreen(navController = navController, drawerState = drawerState, scope = scope, viewModel = userViewModel)

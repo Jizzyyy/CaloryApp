@@ -9,12 +9,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
-import com.example.caloryapp.foodmodel.FoodDetectionViewModel
+import com.example.caloryapp.viewmodel.FoodDetectionViewModel
 import com.example.caloryapp.pages.MainScreen
 import com.example.caloryapp.pages.account.ProfileChangePasswordScreen
 import com.example.caloryapp.pages.account.ProfileDetailScreen
 import com.example.caloryapp.pages.account.ProfileScreen
-import com.example.caloryapp.pages.camera.ScreenTest
+import com.example.caloryapp.pages.calorydetail.ScreenTest
 import com.example.caloryapp.pages.onboard.ChangePasswordScreen
 import com.example.caloryapp.pages.onboard.ForgotPasswordScreen
 import com.example.caloryapp.pages.onboard.LoginScreen
@@ -23,6 +23,7 @@ import com.example.caloryapp.pages.onboard.OnBoardingScreen
 import com.example.caloryapp.pages.onboard.RegisterScreen
 import com.example.caloryapp.pages.onboard.SuccessChangePassword
 import com.example.caloryapp.pages.onboard.SuccessRegister
+import com.example.caloryapp.viewmodel.CaloryHistoryViewModel
 import com.example.caloryapp.viewmodel.UserViewModel
 
 @Composable
@@ -30,6 +31,7 @@ fun Navigation(modifier: Modifier = Modifier) {
     val navController = rememberNavController()
     val userViewModel: UserViewModel = viewModel()
     val foodViewModel: FoodDetectionViewModel = viewModel()
+    val caloryHistoryViewModel: CaloryHistoryViewModel = viewModel()
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
 
@@ -70,7 +72,7 @@ fun Navigation(modifier: Modifier = Modifier) {
 //            HomeScreen(navController = navController, userViewModel)
 //        }
         composable(NavigationScreen.MainScreen.name) {
-            MainScreen(userViewModel, foodViewModel)
+            MainScreen(userViewModel, foodViewModel, caloryHistoryViewModel)
         }
         composable(NavigationScreen.ForgotPasswordScreen.name) {
             ForgotPasswordScreen(navController = navController)

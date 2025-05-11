@@ -14,11 +14,17 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.Card
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.FloatingActionButton
 import androidx.compose.material.Icon
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -28,6 +34,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -35,7 +42,10 @@ import com.example.caloryapp.R
 import com.example.caloryapp.navigation.NavigationScreen
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
+import com.example.caloryapp.ui.theme.medium
 import com.example.caloryapp.ui.theme.primary
+import com.example.caloryapp.ui.theme.semibold
+import com.example.caloryapp.viewmodel.CaloryHistoryViewModel
 import com.example.caloryapp.viewmodel.UserViewModel
 import com.example.caloryapp.widget.FilterBar
 
@@ -45,10 +55,18 @@ fun HomeScreen(
     navController: NavController,
     drawerState: DrawerState,
     scope: kotlinx.coroutines.CoroutineScope,
+    caloryHistoryViewModel: CaloryHistoryViewModel,
     viewModel: UserViewModel,
 ) {
     var selectedFilter by remember { mutableStateOf("Semua") }
     val user = viewModel.user.value
+
+    LaunchedEffect(user) {
+        user?.let {
+            // Memuat 4 riwayat terbaru untuk ditampilkan di home
+            caloryHistoryViewModel.loadHistoryByUsername(it.username, 2)
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -124,6 +142,84 @@ fun HomeScreen(
 
             // Filter Bar
             FilterBar(selectedFilter = selectedFilter, onFilterSelected = { selectedFilter = it })
+            Spacer(modifier = Modifier.height(20.dp))
+            Box(modifier = Modifier.fillMaxWidth()) {
+                if (caloryHistoryViewModel.isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.align(Alignment.Center),
+                        color = primary
+                    )
+                } else if (caloryHistoryViewModel.historyList.isEmpty()) {
+                    Text(
+                        text = "Belum ada riwayat makanan",
+                        style = TextStyle(
+                            fontSize = 16.sp,
+                            fontFamily = medium,
+                            color = Color.Gray
+                        ),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(vertical = 24.dp)
+                    )
+                } else {
+                    // List riwayat kalori menggunakan LazyColumn khusus
+                    LazyColumn(
+                        modifier = Modifier.fillMaxWidth(),
+                        verticalArrangement = Arrangement.spacedBy(12.dp)
+                    ) {
+                        items(caloryHistoryViewModel.historyList) { history ->
+                            // Card item untuk riwayat kalori
+                            Card(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .clickable {
+//                                        navController.navigate("${NavigationScreen.DetailHistory.name}/${history.id}")
+                                    },
+                                elevation = 4.dp,
+                                shape = RoundedCornerShape(16.dp)
+                            ) {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(Color(0xFF4AB54A).copy(alpha = 0.6f)) // Warna hijau sesuai gambar
+                                        .padding(16.dp)
+                                ) {
+                                    Row(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Column(modifier = Modifier.weight(1f)) {
+                                            Text(
+                                                text = "${history.totalCalories} Kalori",
+                                                style = TextStyle(
+                                                    fontSize = 20.sp,
+                                                    color = Color.White,
+                                                    fontFamily = semibold
+                                                )
+                                            )
+
+                                            Text(
+                                                text = "Lihat Detail",
+                                                style = TextStyle(
+                                                    fontSize = 14.sp,
+                                                    color = Color.White,
+                                                    fontFamily = medium,
+                                                    textDecoration = TextDecoration.Underline
+                                                )
+                                            )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Spacer di akhir list
+                        item {
+                            Spacer(modifier = Modifier.height(70.dp))
+                        }
+                    }
+                }
+            }
         }
         FloatingActionButton(
             modifier = Modifier

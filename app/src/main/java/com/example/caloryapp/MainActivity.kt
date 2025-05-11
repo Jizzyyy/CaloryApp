@@ -7,18 +7,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Surface
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.caloryapp.foodmodel.FoodDetectionViewModel
 import com.example.caloryapp.navigation.Navigation
-import com.example.caloryapp.pages.camera.FoodCalorieScreen
-import com.example.caloryapp.pages.camera.FoodCalorieViewModel2
-import com.example.caloryapp.pages.camera.ScreenTest
 //import com.example.caloryapp.pages.NavBarScreen
 import com.example.caloryapp.ui.theme.CaloryAppTheme
 

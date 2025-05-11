@@ -1,4 +1,4 @@
-package com.example.caloryapp.pages.camera
+package com.example.caloryapp.pages.calorydetail
 
 import android.content.Context
 import org.tensorflow.lite.Interpreter
