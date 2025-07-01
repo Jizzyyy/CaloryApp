@@ -3,6 +3,7 @@ package com.example.caloryapp.ui.theme
 import androidx.compose.ui.graphics.Color
 
 var primary = Color(0xff109A17)
+var primary2 = Color(0xff6bbe6f)
 var primaryblack = Color(0xff202020)
 var primarygrey = Color(0xffBABABA)
 var background = Color(0xffF4F4F4)

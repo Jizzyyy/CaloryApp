@@ -1,269 +1,247 @@
 package com.example.caloryapp.pages.calorydetail
 
+import android.graphics.Bitmap
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
+import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
+import androidx.compose.material.TopAppBar
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
+//import androidx.compose.material.icons.filled.Image
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.KeyboardArrowLeft
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.example.caloryapp.foodmodel.FoodCategory
-import com.example.caloryapp.foodmodel.PlateDiagram
+import com.example.caloryapp.model.CaloryModel
 import com.example.caloryapp.ui.theme.background
 import com.example.caloryapp.ui.theme.bold
+import com.example.caloryapp.ui.theme.medium
 import com.example.caloryapp.ui.theme.primary
+import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.semibold
 import com.example.caloryapp.viewmodel.CaloryHistoryViewModel
-import kotlinx.coroutines.launch
+import com.example.caloryapp.viewmodel.UserViewModel
 import java.text.SimpleDateFormat
+import java.util.Date
 import java.util.Locale
 
-/**
- * Layar detail riwayat kalori
- */
 @Composable
-fun CaloryHistoryDetailScreen(
+fun CaloryDetailScreen(
     navController: NavController,
-    historyId: String,
-    viewModel: CaloryHistoryViewModel
+    caloryDate: String,
+    caloryCalories: Int,
+    caloryImagePath: String,
+    userViewModel: UserViewModel,
+    caloryHistoryViewModel: CaloryHistoryViewModel
 ) {
-    val coroutineScope = rememberCoroutineScope()
+    val context = LocalContext.current
+    val user = userViewModel.user.value
+    var bitmap by remember { mutableStateOf<Bitmap?>(null) }
+    var isDeleting by remember { mutableStateOf(false) }
 
-    // Muat data detail saat komponen ditampilkan
-    LaunchedEffect(historyId) {
-        viewModel.loadHistoryDetail(historyId)
-    }
-
-    // Bersihkan state detail saat komponen dihancurkan
-    DisposableEffect(Unit) {
-        onDispose {
-            viewModel.selectedHistory = null
+    // Muat gambar jika ada path
+    LaunchedEffect(caloryImagePath) {
+        if (caloryImagePath.isNotEmpty()) {
+            bitmap = caloryHistoryViewModel.getImageBitmap(context, caloryImagePath)
         }
     }
 
-    Box(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(background)
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 25.dp, vertical = 45.dp)
-                .verticalScroll(rememberScrollState())
-        ) {
-            // Header dengan tombol kembali
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                IconButton(
-                    onClick = { navController.popBackStack() }
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.ArrowBack,
-                        contentDescription = "Kembali",
-                        tint = primary
-                    )
-                }
-
-                Text(
-                    text = "Detail Kalori",
+    Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(
+                    text = "Profil Saya",
                     style = TextStyle(
-                        fontSize = 24.sp,
-                        color = primary,
+                        fontSize = 25.sp,
+                        color = primaryblack,
                         fontFamily = bold
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-
-                // Tombol hapus
-                IconButton(
-                    onClick = {
-                        coroutineScope.launch {
-                            viewModel.deleteHistory(historyId) { success ->
+                    )
+                ) },
+                navigationIcon = {
+                    IconButton(onClick = { navController.navigateUp() }) {
+                        Icon(
+                            imageVector = Icons.Default.KeyboardArrowLeft,
+                            contentDescription = null,
+                            Modifier
+                                .size(28.dp)
+                        )
+                    }
+                },
+                actions = {
+                    // Tombol hapus
+                    IconButton(onClick = {
+                        if (user != null) {
+                            isDeleting = true
+                            caloryHistoryViewModel.deleteCaloryData(
+                                date = caloryDate,
+                                calories = caloryCalories,
+                                imagePath = caloryImagePath,
+                                username = user.username
+                            ) { success ->
+                                isDeleting = false
                                 if (success) {
-                                    navController.popBackStack()
+                                    navController.navigateUp()
                                 }
                             }
                         }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Default.Delete,
+                            contentDescription = "Delete",
+                            tint = Color.White
+                        )
                     }
+                },
+                backgroundColor = background
+            )
+        }
+    ) { paddingValues ->
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .background(background),
+            contentAlignment = Alignment.Center
+        ) {
+            if (isDeleting) {
+                CircularProgressIndicator(color = primary)
+            } else {
+                // Detail kalori
+                Column(
+                    modifier = Modifier.fillMaxSize().padding(16.dp),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Delete,
-                        contentDescription = "Hapus",
-                        tint = Color.Red
+                    // Gambar makanan
+                    Box(
+                        modifier = Modifier
+                            .size(250.dp)
+                            .clip(RoundedCornerShape(16.dp))
+                            .background(Color.LightGray),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        bitmap?.let { bmp ->
+                            Image(
+                                bitmap = bmp.asImageBitmap(),
+                                contentDescription = "Food Image",
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        } ?: Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "No Image",
+                            modifier = Modifier.size(80.dp),
+                            tint = Color.Gray
+                        )
+                    }
+
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    // Informasi kalori
+                    Text(
+                        text = "$caloryCalories Kalori",
+                        style = TextStyle(
+                            fontSize = 32.sp,
+                            color = primary,
+                            fontFamily = bold
+                        )
                     )
-                }
-            }
 
-            Spacer(modifier = Modifier.height(30.dp))
+                    Spacer(modifier = Modifier.height(8.dp))
 
-            // Tampilkan loading atau konten
-            if (viewModel.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.align(Alignment.CenterHorizontally),
-                    color = primary
-                )
-            } else if (viewModel.selectedHistory != null) {
-                val history = viewModel.selectedHistory!!
-
-                // Total kalori
-                Text(
-                    text = "${history.totalCalories}",
-                    style = TextStyle(
-                        fontSize = 48.sp,
-                        color = primary,
-                        fontFamily = bold
-                    ),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-                Text(
-                    text = "Kalori",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        color = primary,
-                        fontFamily = semibold
-                    ),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Tanggal dan waktu
-                val dateFormat = SimpleDateFormat("dd MMMM yyyy, HH:mm", Locale("id", "ID"))
-                Text(
-                    text = "Tercatat pada ${dateFormat.format(history.getDate())}",
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        color = Color.Gray,
-                        fontWeight = FontWeight.Normal
-                    ),
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Diagram komposisi makanan
-                // Konversi kembali Map<String, Float> ke Map<FoodCategory, Float>
-                val foodCategories = history.foodComposition.mapKeys { entry ->
-                    FoodCategory.values().find { it.displayName == entry.key } ?: FoodCategory.OTHER
-                }
-
-                Box(
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                ) {
-                    PlateDiagram(
-                        categories = foodCategories,
-                        modifier = Modifier.size(200.dp)
+                    Text(
+                        text = "Tanggal: ${formatDate(caloryDate)}",
+                        style = TextStyle(
+                            fontSize = 18.sp,
+                            color = Color.Gray,
+                            fontFamily = semibold
+                        )
                     )
-                }
 
-                Spacer(modifier = Modifier.height(32.dp))
+                    Spacer(modifier = Modifier.height(48.dp))
 
-                // Breakdown kalori per kategori
-                Text(
-                    text = "Komposisi Kalori:",
-                    style = TextStyle(
-                        fontSize = 18.sp,
-                        color = primary,
-                        fontWeight = FontWeight.Bold
-                    )
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Tampilkan breakdown per kategori
-                history.foodComposition.forEach { (categoryName, percentage) ->
-                    val category = FoodCategory.values().find { it.displayName == categoryName }
-                    val colorHex = category?.colorHex ?: "#A0A0A0"
-                    val icon = category?.icon ?: "🍽️"
-                    val calories = history.caloriesPerCategory[categoryName] ?: 0
-
-                    Row(
+                    // Tombol hapus
+                    Button(
+                        onClick = {
+                            if (user != null) {
+                                isDeleting = true
+                                caloryHistoryViewModel.deleteCaloryData(
+                                    date = caloryDate,
+                                    calories = caloryCalories,
+                                    imagePath = caloryImagePath,
+                                    username = user.username
+                                ) { success ->
+                                    isDeleting = false
+                                    if (success) {
+                                        navController.navigateUp()
+                                    }
+                                }
+                            }
+                        },
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(vertical = 4.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .height(56.dp),
+                        colors = ButtonDefaults.buttonColors(backgroundColor = Color.Red),
+                        shape = RoundedCornerShape(16.dp),
+                        enabled = !isDeleting
                     ) {
                         Text(
-                            text = "$icon $categoryName",
-                            color = Color(android.graphics.Color.parseColor(colorHex))
+                            text = "Hapus Data Kalori",
+                            style = TextStyle(
+                                fontSize = 18.sp,
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold
+                            )
                         )
-
-                        Column(horizontalAlignment = Alignment.End) {
-                            Text(
-                                text = "$calories kal",
-                                fontWeight = FontWeight.Medium
-                            )
-                            Text(
-                                text = "(%.0f%%)".format(percentage * 100),
-                                color = Color.Gray,
-                                fontSize = 12.sp
-                            )
-                        }
                     }
                 }
-
-                Spacer(modifier = Modifier.height(32.dp))
-
-                // Tombol kembali ke riwayat
-                Button(
-                    onClick = { navController.popBackStack() },
-                    modifier = Modifier.fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    colors = ButtonDefaults.buttonColors(backgroundColor = primary)
-                ) {
-                    Text(
-                        text = "Kembali ke Riwayat",
-                        color = Color.White,
-                        modifier = Modifier.padding(vertical = 8.dp)
-                    )
-                }
-
-                Spacer(modifier = Modifier.height(16.dp))
-            } else if (viewModel.errorMessage != null) {
-                // Error message
-                Text(
-                    text = viewModel.errorMessage!!,
-                    color = Color.Red,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
-            } else {
-                // Jika data tidak ditemukan
-                Text(
-                    text = "Data tidak ditemukan",
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
             }
         }
+    }
+}
+
+// Fungsi untuk memformat tanggal
+fun formatDate(dateString: String): String {
+    return try {
+        val inputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("dd MMMM yyyy", Locale.getDefault())
+        val date = inputFormat.parse(dateString)
+        outputFormat.format(date ?: Date())
+    } catch (e: Exception) {
+        dateString // Kembalikan string asli jika format tidak sesuai
     }
 }

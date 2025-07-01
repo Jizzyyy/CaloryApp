@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 //noinspection UsingMaterialAndMaterial3Libraries
 import androidx.compose.material.OutlinedTextField
 //noinspection UsingMaterialAndMaterial3Libraries
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.caloryapp.R
@@ -27,7 +29,8 @@ fun CustomTextField(
     value: String,
     onValueChange: (String) -> Unit,
     placeholderText: String,
-    input: Boolean
+    input: Boolean,
+    keyboardOptions: KeyboardOptions
 ) {
     OutlinedTextField(
         textStyle =  TextStyle(
@@ -36,9 +39,11 @@ fun CustomTextField(
             fontFamily = semibold,
             letterSpacing = 0.5.sp
         ),
+
         value = value,
         enabled = input,
         onValueChange = onValueChange,
+        keyboardOptions = keyboardOptions,
         placeholder = {
             androidx.compose.material.Text(
                 text = placeholderText,

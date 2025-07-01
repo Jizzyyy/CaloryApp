@@ -1,13 +1,17 @@
 package com.example.caloryapp.repository
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.util.Log
+import com.example.caloryapp.model.CaloryModel
 import com.example.caloryapp.model.UserModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.Query
 
 class UserRepository {
     private val db = FirebaseFirestore.getInstance()
+
 
     fun registerUser(user: UserModel, onComplete: (Boolean) -> Unit) {
         db.collection("users")
@@ -50,11 +54,60 @@ class UserRepository {
             }
     }
 
+
+    fun saveCalorieData(username: String, calories: Int, onComplete: (Boolean) -> Unit) {
+        val currentDate =
+            java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss", java.util.Locale.getDefault())
+                .format(java.util.Date())
+        val calorieData = hashMapOf(
+            "calories" to calories,
+            "date" to currentDate
+        )
+        val caloryData = CaloryModel(calories, currentDate, username)
+        db.collection("users")
+            .whereEqualTo("username", username)
+            .get()
+            .addOnSuccessListener { result ->
+                if (!result.isEmpty) {
+                    val userDocument = result.documents[0]
+                    val calorieId = db.collection("users")
+                        .document(userDocument.id)
+                        .collection("calorieData")
+                        .document().id
+
+                    userDocument.reference.collection("calorieData")
+                        .document(calorieId)
+                        .set(caloryData)
+                        .addOnSuccessListener {
+                            Log.d("CaloryApp", "Data kalori berhasil disimpan: $caloryData")
+                            onComplete(true)
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("CaloryApp", "Gagal menyimpan data: ${e.message}")
+                            onComplete(false)
+                        }
+                } else {
+                    Log.e("CaloryApp", "Pengguna tidak ditemukan: $username")
+                    onComplete(false)
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("CaloryApp", "Gagal mencari pengguna: ${e.message}")
+                onComplete(false)
+            }
+    }
+
+
     fun logoutUser() {
         FirebaseAuth.getInstance().signOut()
     }
 
-    fun updatePasswordByUsername(username: String, oldPassword: String, newPassword: String, onComplete: (Boolean) -> Unit) {
+    fun updatePasswordByUsername(
+        username: String,
+        oldPassword: String,
+        newPassword: String,
+        onComplete: (Boolean) -> Unit
+    ) {
         db.collection("users")
             .whereEqualTo("username", username)  // Mencari pengguna berdasarkan username
             .get()
@@ -85,7 +138,15 @@ class UserRepository {
             }
     }
 
-    fun updateUserData(username: String, fullName: String, email: String, gender: String, weight: String, height: String, onComplete: (Boolean) -> Unit) {
+    fun updateUserData(
+        username: String,
+        fullName: String,
+        email: String,
+        gender: String,
+        weight: String,
+        height: String,
+        onComplete: (Boolean) -> Unit
+    ) {
         db.collection("users")
             .whereEqualTo("username", username)
             .get()
@@ -116,7 +177,12 @@ class UserRepository {
     }
 
 
-    fun updatePasswordByUsername2(username: String, newPassword: String, confirmPassword: String, onComplete: (Boolean) -> Unit) {
+    fun updatePasswordByUsername2(
+        username: String,
+        newPassword: String,
+        confirmPassword: String,
+        onComplete: (Boolean) -> Unit
+    ) {
         // Memeriksa apakah kata sandi baru dan konfirmasi cocok
         if (newPassword != confirmPassword) {
             onComplete(false) // Kata sandi tidak cocok

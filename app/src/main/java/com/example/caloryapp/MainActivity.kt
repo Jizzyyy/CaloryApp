@@ -7,11 +7,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.annotation.RequiresApi
+import androidx.compose.runtime.LaunchedEffect
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.compose.rememberNavController
 import com.example.caloryapp.navigation.Navigation
+import com.example.caloryapp.navigation.NavigationScreen
 //import com.example.caloryapp.pages.NavBarScreen
 import com.example.caloryapp.ui.theme.CaloryAppTheme
+import com.example.caloryapp.viewmodel.UserViewModel
 
 class MainActivity : ComponentActivity() {
     @RequiresApi(Build.VERSION_CODES.TIRAMISU)
@@ -34,29 +39,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             CaloryAppTheme {
-//                Surface(
-//                    modifier = Modifier.fillMaxSize(),
-//                    color = MaterialTheme.colorScheme.background
-//                ) {
-//                    val viewModel = viewModel<FoodDetectionViewModel>()
-//                    ScreenTest(viewModel)
-//                }
-//                val context = LocalContext.current
-//                var classificationResult by remember { mutableStateOf("Memuat...") }
-//
-//                Box {
-//                    CameraPreview(onImageCaptured = { byteBuffer ->
-//                        val result = foodClassifier.classify(byteBuffer)
-//                        classificationResult = result
-//
-//                        Toast.makeText(context, "Hasil: $result", Toast.LENGTH_SHORT).show()
-//                    })
-//                }
-                Navigation()
-
-//                LoginScreen(navController = rememberNavController())
-//                ProfileScreen(navController = rememberNavController())
-//                MainScreen()
+                Navigation(context = applicationContext)
             }
         }
     }

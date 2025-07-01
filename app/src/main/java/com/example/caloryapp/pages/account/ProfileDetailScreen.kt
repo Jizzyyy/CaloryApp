@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Icon
 import androidx.compose.material.Text
@@ -30,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
@@ -161,7 +163,8 @@ fun ProfileDetailScreen(
                 value = fullName,
                 onValueChange = { fullName = it },
                 placeholderText = "Masukkan Nama Lengkap",
-                input = isEditing
+                input = isEditing,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             Spacer(modifier.height(20.dp))
@@ -179,7 +182,8 @@ fun ProfileDetailScreen(
                 value = username,
                 onValueChange = { username = it },
                 placeholderText = "Masukkan Username",
-                input = false  // Tidak dapat mengedit username
+                input = false,  // Tidak dapat mengedit username
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             Spacer(modifier.height(20.dp))
@@ -197,7 +201,8 @@ fun ProfileDetailScreen(
                 value = gmail,
                 onValueChange = { gmail = it },
                 placeholderText = "Masukkan Email",
-                input = isEditing
+                input = isEditing,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
 
             Spacer(modifier.height(20.dp))
@@ -215,7 +220,8 @@ fun ProfileDetailScreen(
                 value = selectedGender,
                 onValueChange = { selectedGender = it },
                 placeholderText = "Masukkan Gender",
-                input = isEditing
+                input = isEditing,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             Spacer(modifier.height(20.dp))
@@ -233,7 +239,8 @@ fun ProfileDetailScreen(
                 value = weight,
                 onValueChange = { weight = it },
                 placeholderText = "Masukkan Berat Badan",
-                input = isEditing
+                input = isEditing,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
             Spacer(modifier.height(20.dp))
@@ -251,7 +258,8 @@ fun ProfileDetailScreen(
                 value = height,
                 onValueChange = { height = it },
                 placeholderText = "Masukkan Tinggi Badan",
-                input = isEditing
+                input = isEditing,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
             // Tombol Edit

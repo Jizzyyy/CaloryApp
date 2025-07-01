@@ -57,6 +57,7 @@ dependencies {
     implementation (libs.ohteepee)
 
     implementation("io.coil-kt.coil3:coil-compose:3.0.0")
+    implementation("androidx.appcompat:appcompat:1.7.1")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)

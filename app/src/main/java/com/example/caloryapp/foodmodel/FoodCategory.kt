@@ -2,15 +2,15 @@ package com.example.caloryapp.foodmodel
 
 enum class FoodCategory(
     val displayName: String,
-    val caloriesPer100g: Int,
+    val caloriesPerPorsi: Int,
     val colorHex: String,
     val icon: String
 ) {
-    CARBS("Karbohidrat", 150, "#FECD45", "🍚"),      // Tetap 150 kal/100g
-    PROTEIN("Protein", 250, "#FC8369", "🍗"),        // Ubah ke 250 kal/100g
-    VEGETABLES("Sayuran", 30, "#4AB54A", "🥦"),      // Tetap 30 kal/100g
-    FRUITS("Buah", 60, "#FF6B6B", "🍎"),            // Tetap 60 kal/100g
-    OTHER("Lainnya", 200, "#A0A0A0", "🍬")          // Tetap 200 kal/100g
+    CARBS("Karbohidrat", 85, "#FECD45", "🍚"), // 1/3 piring
+    PROTEIN("Protein", 25, "#FC8369", "🍗"), // 1/6 piring
+    VEGETABLES("Sayuran", 25, "#4AB54A", "🥦"), // 1/3 piring
+    FRUITS("Buah", 25, "#FF6B6B", "🍎"), // 1/6 piring
+//    OTHER("Lainnya", 200, "#A0A0A0", "🍬")          // Tetap 200 kal/100g
 }
 
 data class FoodDetectionResult(
@@ -23,6 +23,6 @@ data class FoodDetectionResult(
 fun Map<FoodCategory, Float>.calculateTotalCalories(plateWeightGrams: Int = 500): Int {
     return this.entries.sumOf { (category, percentage) ->
         val weightGrams = plateWeightGrams * percentage
-        (weightGrams * category.caloriesPer100g / 100).toInt()
+        (weightGrams * category.caloriesPerPorsi / 100).toInt()
     }
 }

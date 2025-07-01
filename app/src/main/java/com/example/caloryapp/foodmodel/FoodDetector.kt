@@ -15,8 +15,7 @@ class FoodDetector(private val context: Context) {
         FoodCategory.CARBS,
         FoodCategory.PROTEIN,
         FoodCategory.VEGETABLES,
-        FoodCategory.FRUITS,
-        FoodCategory.OTHER
+        FoodCategory.FRUITS
     )
 
     init {
@@ -24,7 +23,7 @@ class FoodDetector(private val context: Context) {
     }
 
     private fun loadModel() {
-        val assetFileDescriptor = context.assets.openFd("model_food_plate_densenet.tflite")
+        val assetFileDescriptor = context.assets.openFd("model_food_plate_densenet5.tflite")
         val fileInputStream = FileInputStream(assetFileDescriptor.fileDescriptor)
         val fileChannel = fileInputStream.channel
         val startOffset = assetFileDescriptor.startOffset
@@ -63,7 +62,7 @@ class FoodDetector(private val context: Context) {
         modelInput.rewind() // Penting: reset posisi buffer ke awal
 
         // Run model - pastikan outputBuffer memiliki dimensi yang benar
-        val outputBuffer = Array(1) { FloatArray(5) } // 5 categories
+        val outputBuffer = Array(1) { FloatArray(4) } // 5 categories
         interpreter?.run(modelInput, outputBuffer)
 
         // Get predicted category

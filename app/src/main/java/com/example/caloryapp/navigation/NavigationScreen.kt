@@ -15,6 +15,7 @@ enum class NavigationScreen {
     ProfileScreen,
     ProfileDetailScreen,
     ProfileChangePasswordScreen,
+    CaloryDetailScreen,
     ScreenTest;
 
     fun fromRoute(route: String): NavigationScreen =
@@ -33,6 +34,7 @@ enum class NavigationScreen {
             SuccessRegister.name -> SuccessRegister
             ProfileDetailScreen.name -> ProfileDetailScreen
             ProfileChangePasswordScreen.name -> ProfileChangePasswordScreen
+            CaloryDetailScreen.name -> CaloryDetailScreen
             ScreenTest.name -> ScreenTest
 
             else -> throw IllegalArgumentException("$route gagal bji")

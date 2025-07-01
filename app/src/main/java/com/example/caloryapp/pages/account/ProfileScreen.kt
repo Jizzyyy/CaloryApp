@@ -1,5 +1,7 @@
 package com.example.caloryapp.pages.account
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -14,10 +16,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.Divider
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -45,9 +50,11 @@ import com.example.caloryapp.ui.theme.primaryblack
 import com.example.caloryapp.ui.theme.primarygrey
 import com.example.caloryapp.ui.theme.primaryred
 import com.example.caloryapp.ui.theme.regular
+import com.example.caloryapp.viewmodel.LoginState
 import com.example.caloryapp.viewmodel.UserViewModel
 import com.example.caloryapp.widget.SimpleAlertDialog
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -70,6 +77,35 @@ fun ProfileScreen(
     val currentDate = Calendar.getInstance().time
     val dateFormat = SimpleDateFormat("EEEE, dd MMMM yyyy", Locale("id", "ID"))
     val formattedDate = dateFormat.format(currentDate)
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.initSessionManager(context)
+    }
+
+    // Amati state login untuk navigasi
+    val loginState by viewModel.loginState
+
+    // Navigasi otomatis saat logout
+    LaunchedEffect(Unit) {
+        viewModel.initSessionManager(context)
+    }
+
+    if (user == null) {
+        // Opsi 1: Tampilkan loading
+        Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            CircularProgressIndicator()
+        }
+
+        // Opsi 2: Navigasi ke login screen
+        LaunchedEffect(Unit) {
+            navController.navigate(NavigationScreen.LoginScreen.name) {
+                popUpTo(0) { inclusive = true }
+            }
+        }
+
+        return // Penting! Hentikan komposisi di sini
+    }
 
     Box(
         modifier
@@ -228,7 +264,17 @@ fun ProfileScreen(
                     dialogSubTitle = "Apakah Anda yakin ingin keluar?",
                     onDismissRequest = { openAlertDialog.value = false },
                     onConfirmation = {
-                        logoutUser()
+                        try {
+                            navController.navigate(NavigationScreen.LoginScreen.name) {
+                                popUpTo(0) { inclusive = true }
+                            }
+//                            delay(100)
+                            viewModel.logout()
+                            // Navigasi dilakukan oleh LaunchedEffect di atas
+                        } catch (e: Exception) {
+                            Log.e("ProfileScreen", "Error during logout: ${e.message}")
+                            Toast.makeText(context, "Gagal logout: ${e.message}", Toast.LENGTH_SHORT).show()
+                        }
                         openAlertDialog.value = false
 //                        Navigation()
                     }

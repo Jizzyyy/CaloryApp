@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Button
 import androidx.compose.material.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -124,7 +126,8 @@ fun RegisterScreen(
                 value = username,
                 onValueChange = { username = it },
                 placeholderText = "Masukkan Username",
-                input = true
+                input = true,
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             // gmail
@@ -142,7 +145,8 @@ fun RegisterScreen(
                 value = gmail,
                 onValueChange = { gmail = it },
                 input = true,
-                placeholderText = "Masukkan Email"
+                placeholderText = "Masukkan Email",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
             )
 
             // nama lengkap
@@ -159,7 +163,8 @@ fun RegisterScreen(
             CustomTextField(
                 value = fullName,
                 onValueChange = { fullName = it }, input = true,
-                placeholderText = "Masukkan Nama Lengkap"
+                placeholderText = "Masukkan Nama Lengkap",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
             )
 
             // pw
@@ -179,7 +184,9 @@ fun RegisterScreen(
             CustomTextField(
                 value = password,
                 onValueChange = { password = it }, input = true,
-                placeholderText = "Masukkan Kata Sandi"
+                placeholderText = "Masukkan Kata Sandi",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text)
+
             )
 
             // gender
@@ -211,7 +218,9 @@ fun RegisterScreen(
             CustomTextField(
                 value = weight.toString(),
                 onValueChange = { weight = it }, input = true,
-                placeholderText = "Masukkan Berat Badan"
+                placeholderText = "Masukkan Berat Badan",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
+
             )
 
             // tinggi badan
@@ -228,7 +237,8 @@ fun RegisterScreen(
             CustomTextField(
                 value = height.toString(),
                 onValueChange = { height = it }, input = true,
-                placeholderText = "Masukkan Tinggi Badan"
+                placeholderText = "Masukkan Tinggi Badan",
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number)
             )
 
             // btn daftar
